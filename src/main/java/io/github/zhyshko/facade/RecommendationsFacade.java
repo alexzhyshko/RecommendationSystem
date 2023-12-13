@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface RecommendationsFacade {
 
-    Map<Long, ProductData> getForUser(UUID userExternalId);
+    Map<ProductData, Long> getForUser(UUID userExternalId);
 
 }

@@ -2,7 +2,6 @@ package io.github.zhyshko.controller;
 
 import io.github.zhyshko.DatabasePopulator;
 import io.github.zhyshko.dto.order.OrderData;
-import io.github.zhyshko.dto.review.ReviewData;
 import io.github.zhyshko.facade.IndexerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +27,8 @@ public class IndexerController {
     }
 
     @PostMapping("/review")
-    public HttpStatus orderIndex(@RequestBody ReviewData reviewData) {
-        indexerFacade.indexReview(reviewData);
+    public HttpStatus reviewIndex(@RequestBody OrderData orderData) {
+        indexerFacade.indexReview(orderData);
         return HttpStatus.ACCEPTED;
     }
 

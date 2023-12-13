@@ -6,6 +6,7 @@ import io.github.zhyshko.dto.product.*;
 import io.github.zhyshko.mapper.StoreMapper;
 import io.github.zhyshko.model.order.Order;
 import io.github.zhyshko.model.product.*;
+import io.github.zhyshko.service.product.ProductService;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +29,14 @@ public abstract class ProductMapper {
     @Autowired
     protected StoreMapper storeMapper;
     @Autowired
-    protected ProductDao productDao;
+    protected ProductService productService;
     
     public Product toModel(ProductData orderData) {
         if ( orderData == null ) {
             return null;
         }
 
-        return productDao.findByExternalIdAndStoreId(orderData.getExternalId(), orderData.getStore().getExternalId())
-                .orElseGet(() -> productDao.save(createProduct(orderData)));
-
+        return productService.saveOrUpdate(createProduct(orderData));
     }
     public abstract ProductData toDto(Product order);
 

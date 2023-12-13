@@ -1,7 +1,5 @@
 package io.github.zhyshko.dao.review;
 
-import io.github.zhyshko.model.product.Product;
-import io.github.zhyshko.model.review.Review;
 import io.github.zhyshko.model.review.ReviewEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

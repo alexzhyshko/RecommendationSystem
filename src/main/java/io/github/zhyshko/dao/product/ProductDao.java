@@ -13,15 +13,12 @@ import java.util.List;
 @Repository
 public interface ProductDao extends JpaRepository<Product, Long> {
 
-    Optional<Product> findByExternalId(UUID externalId);
-
     Optional<Product> findByExternalIdAndStoreId(UUID externalId, UUID storeId);
 
     @Query(value = """
-SELECT p.* FROM products as p 
-JOIN review_entries as re ON re.product_id=p.id
-JOIN reviews as r ON re.review_id=r.id
-JOIN orders as o ON o.review_id=r.id
+SELECT DISTINCT p.* FROM products as p 
+JOIN order_entries as oe ON oe.product_id=p.id
+JOIN orders as o ON oe.order_id=o.id
 JOIN users as u ON o.owner_id=u.id
 WHERE u.external_id=:externalId
 """, nativeQuery = true)

@@ -1,7 +1,6 @@
 package io.github.zhyshko.model.order;
 
 import io.github.zhyshko.model.Base;
-import io.github.zhyshko.model.review.Review;
 import io.github.zhyshko.model.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Order")
 @Table(name = "orders")
@@ -21,8 +21,9 @@ public class Order extends Base {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User owner;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Review review;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private List<OrderEntry> orderEntries;
     private LocalDateTime createdTime;
 
 }

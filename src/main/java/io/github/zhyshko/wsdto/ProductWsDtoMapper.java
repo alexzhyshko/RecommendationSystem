@@ -8,10 +8,10 @@ import java.util.Map;
 @Component
 public class ProductWsDtoMapper {
 
-    public ProductWsDto toWsDto(Map.Entry<Long, ProductData> productDataScoreInfo){
+    public ProductWsDto toWsDto(Map.Entry<ProductData, Long> productDataScoreInfo){
         return ProductWsDto.builder()
-                .score(productDataScoreInfo.getKey())
-                .externalId(productDataScoreInfo.getValue().getExternalId())
+                .score(productDataScoreInfo.getValue())
+                .externalId(productDataScoreInfo.getKey().getExternalId())
                 .build();
     }
 

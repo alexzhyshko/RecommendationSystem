@@ -1,12 +1,12 @@
 package io.github.zhyshko.dto.order;
 
-import io.github.zhyshko.dto.review.ReviewData;
 import io.github.zhyshko.dto.user.UserData;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 import io.github.zhyshko.dto.StoreData;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -21,7 +21,7 @@ public class OrderData {
     private StoreData store;
 
     private UserData owner;
-    private ReviewData review;
+    private List<OrderEntryData> orderEntries;
     private LocalDateTime createdTime;
 
 }

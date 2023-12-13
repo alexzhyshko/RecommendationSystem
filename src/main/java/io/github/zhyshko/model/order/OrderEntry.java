@@ -1,7 +1,8 @@
-package io.github.zhyshko.model.review;
+package io.github.zhyshko.model.order;
 
 import io.github.zhyshko.model.Base;
 import io.github.zhyshko.model.product.Product;
+import io.github.zhyshko.model.review.ReviewEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,15 +11,18 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@Entity(name="ReviewEntry")
-@Table(name="review_entries")
+@Entity(name="OrderEntry")
+@Table(name="order_entries")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class ReviewEntry extends Base {
+public class OrderEntry extends Base {
 
     private LocalDateTime timeCreated;
-    private Integer mark;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ReviewEntry reviewEntry;
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Product product;
 
 }

@@ -15,12 +15,8 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Store {
 
-//     @Id
-//     @GeneratedValue(strategy= GenerationType.AUTO)
-//     private Long id;
 
      @Id
-     //@Column(unique=true, nullable = false)
      @EqualsAndHashCode.Include
      private UUID id;
 

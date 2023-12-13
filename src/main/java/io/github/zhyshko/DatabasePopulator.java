@@ -2,13 +2,11 @@ package io.github.zhyshko;
 
 import io.github.zhyshko.dto.StoreData;
 import io.github.zhyshko.dto.order.OrderData;
+import io.github.zhyshko.dto.order.OrderEntryData;
 import io.github.zhyshko.dto.product.*;
-import io.github.zhyshko.dto.review.ReviewData;
 import io.github.zhyshko.dto.review.ReviewEntryData;
 import io.github.zhyshko.dto.user.UserData;
 import io.github.zhyshko.facade.IndexerFacade;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -28,20 +26,20 @@ public class DatabasePopulator{
 
     public void populateDatabase(IndexerFacade indexerFacade) {
 
-        OrderData orderData1 = createOrder(createReviewData1(), createUserData1());
-        OrderData orderData2 = createOrder(createReviewData2(), createUserData1());
-        OrderData orderData3 = createOrder(createReviewData3(), createUserData2());
+        OrderData orderData1 = createOrder(List.of(createOrderEntry1(1), createOrderEntry2(1)), createUserData1());
+        OrderData orderData2 = createOrder(List.of(createOrderEntry3(-1), createOrderEntry1(1)), createUserData1());
+        OrderData orderData3 = createOrder(List.of(createOrderEntry1(1)), createUserData2());
 
         indexerFacade.indexOrder(orderData1);
         indexerFacade.indexOrder(orderData2);
         indexerFacade.indexOrder(orderData3);
     }
 
-    private OrderData createOrder(ReviewData reviewData, UserData userData) {
+    private OrderData createOrder(List<OrderEntryData> orderEntryDataList, UserData userData) {
         return OrderData.builder()
                 .externalId(UUID.randomUUID())
                 .owner(userData)
-                .review(reviewData)
+                .orderEntries(orderEntryDataList)
                 .createdTime(LocalDateTime.now())
                 .store(createStoreData())
                 .build();
@@ -61,57 +59,42 @@ public class DatabasePopulator{
                 .build();
     }
 
-    private ReviewData createReviewData1() {
-        return ReviewData.builder()
-                .externalId(UUID.randomUUID())
-                .reviewEntries(List.of(createReviewEntry1(1), createReviewEntry2(1)))
-                .store(createStoreData())
-                .build();
-    }
-
-    private ReviewData createReviewData2() {
-        return ReviewData.builder()
-                .externalId(UUID.randomUUID())
-                .reviewEntries(List.of(createReviewEntry3(-1), createReviewEntry1(1)))
-                .store(createStoreData())
-                .build();
-    }
-
-    private ReviewData createReviewData3() {
-        return ReviewData.builder()
-                .externalId(UUID.randomUUID())
-                .reviewEntries(List.of(createReviewEntry1(1)))
-                .store(createStoreData())
-                .build();
-    }
-
-    private ReviewEntryData createReviewEntry1(int mark) {
-        return ReviewEntryData.builder()
+    private OrderEntryData createOrderEntry1(int mark) {
+        return OrderEntryData.builder()
                 .externalId(UUID.randomUUID())
                 .timeCreated(LocalDateTime.now())
-                .mark(mark)
                 .store(createStoreData())
                 .product(createProduct1())
+                .reviewEntry(createReviewEntry(mark))
                 .build();
     }
 
-    private ReviewEntryData createReviewEntry2(int mark) {
-        return ReviewEntryData.builder()
+    private OrderEntryData createOrderEntry2(int mark) {
+        return OrderEntryData.builder()
                 .externalId(UUID.randomUUID())
                 .timeCreated(LocalDateTime.now())
-                .mark(mark)
                 .store(createStoreData())
                 .product(createProduct2())
+                .reviewEntry(createReviewEntry(mark))
                 .build();
     }
 
-    private ReviewEntryData createReviewEntry3(int mark) {
-        return ReviewEntryData.builder()
+    private OrderEntryData createOrderEntry3(int mark) {
+        return OrderEntryData.builder()
                 .externalId(UUID.randomUUID())
                 .timeCreated(LocalDateTime.now())
-                .mark(mark)
                 .store(createStoreData())
                 .product(createProduct3())
+                .reviewEntry(createReviewEntry(mark))
+                .build();
+    }
+
+    private ReviewEntryData createReviewEntry(int mark) {
+        return ReviewEntryData.builder()
+                .externalId(UUID.randomUUID())
+                .mark(mark)
+                .timeCreated(LocalDateTime.now())
+                .store(createStoreData())
                 .build();
     }
 
