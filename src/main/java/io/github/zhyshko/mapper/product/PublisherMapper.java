@@ -1,11 +1,15 @@
 package io.github.zhyshko.mapper.product;
 
 import io.github.zhyshko.dao.product.PublisherDao;
+import io.github.zhyshko.dto.product.AuthorData;
 import io.github.zhyshko.dto.product.PublisherData;
 import io.github.zhyshko.mapper.StoreMapper;
+import io.github.zhyshko.model.product.Author;
 import io.github.zhyshko.model.product.Publisher;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {StoreMapper.class})
 public abstract class PublisherMapper {
@@ -24,6 +28,13 @@ public abstract class PublisherMapper {
                 .orElseGet(() -> publisherDao.save(createPublisher(orderData)));
     }
     public abstract PublisherData toDto(Publisher order);
+
+    public List<PublisherData> toDtolist(List<Publisher> publisherList) {
+        return publisherList
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
 
     private Publisher createPublisher(PublisherData publisherData) {
         Publisher.PublisherBuilder<?, ?> publisher = Publisher.builder();

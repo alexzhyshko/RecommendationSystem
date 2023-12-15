@@ -5,6 +5,7 @@ import io.github.zhyshko.model.product.Product;
 import io.github.zhyshko.service.product.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,11 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<Product> getOrderedProducts(UUID userExternalId) {
         return productDao.findAllProductsOrderedByUser(userExternalId);
+    }
+
+    @Override
+    public List<Product> getProductsOrderedAfter(LocalDateTime dateAfter) {
+        return productDao.findProductsOrderedAfter(dateAfter);
     }
 
     @Override

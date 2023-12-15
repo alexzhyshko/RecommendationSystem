@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface OrderEntryService {
 
-    List<OrderEntry> getAllOrderEntriesOfOrdersWithThisProduct(UUID productId);
+    List<OrderEntry> getAllOrderEntriesOfOrdersWithThisProduct(UUID storeId, UUID productId);
 
     OrderEntry saveOrUpdate(OrderEntry orderEntry);
 }

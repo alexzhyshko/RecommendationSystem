@@ -22,9 +22,11 @@ WHERE o.id IN (
     SELECT o.id FROM orders as o 
     JOIN order_entries as oe ON oe.order_id=o.id
     JOIN products as p ON oe.product_id = p.id
+    JOIN stores as s ON o.store_id = s.id
     WHERE p.external_id = :productExternalId
+    AND s.id = :storeId
 )
 """, nativeQuery = true)
-    List<OrderEntry> findAllOrderEntriesOfOrdersWithThisProduct(UUID productExternalId);
+    List<OrderEntry> findAllOrderEntriesOfOrdersWithThisProductWithStoreId(UUID storeId, UUID productExternalId);
 
 }

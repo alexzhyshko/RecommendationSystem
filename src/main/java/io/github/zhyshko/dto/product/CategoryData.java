@@ -17,7 +17,6 @@ public class CategoryData {
     private Long id;
     private UUID externalId;
     private StoreData store;
-
     private List<CategoryData> subcategories;
 
 }

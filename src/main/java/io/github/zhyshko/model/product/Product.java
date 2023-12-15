@@ -16,8 +16,10 @@ import java.util.List;
 @SuperBuilder
 public class Product extends Base {
 
-    @OneToMany(cascade= CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="product_productattributes",
+            joinColumns={@JoinColumn(name="product_id")},
+            inverseJoinColumns={@JoinColumn(name="product_attribute_id")})
     private List<ProductAttribute> productAttributes;
     @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name="product_authors",

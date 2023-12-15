@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
@@ -21,7 +22,18 @@ JOIN order_entries as oe ON oe.product_id=p.id
 JOIN orders as o ON oe.order_id=o.id
 JOIN users as u ON o.owner_id=u.id
 WHERE u.external_id=:externalId
+ORDER BY o.timeCreated DESC
 """, nativeQuery = true)
     List<Product> findAllProductsOrderedByUser(UUID externalId);
+
+    @Query(value = """
+SELECT DISTINCT p.* FROM products as p 
+JOIN order_entries as oe ON oe.product_id=p.id
+JOIN orders as o ON oe.order_id=o.id
+WHERE o.timeCreated >= :dateAfter
+ORDER BY o.timeCreated DESC
+""", nativeQuery = true)
+    List<Product> findProductsOrderedAfter(LocalDateTime dateAfter);
+
 
 }

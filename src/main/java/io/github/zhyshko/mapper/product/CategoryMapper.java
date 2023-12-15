@@ -28,6 +28,13 @@ public abstract class CategoryMapper {
     }
     public abstract CategoryData toDto(Category order);
 
+    public List<CategoryData> toDtolist(List<Category> categoryList) {
+        return categoryList
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     private Category createCategory(CategoryData categoryData) {
         Category.CategoryBuilder<?, ?> category = Category.builder();
 

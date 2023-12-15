@@ -14,16 +14,4 @@ public interface ReviewEntryDao extends JpaRepository<ReviewEntry, Long> {
 
     Optional<ReviewEntry> findByExternalIdAndStoreId(UUID externalId, UUID storeId);
 
-    @Query(value = """
-SELECT re.* FROM reviews as r 
-JOIN review_entries as re ON re.review_id=r.id 
-WHERE r.id IN (
-    SELECT r.id FROM reviews as r 
-    JOIN review_entries as re ON re.review_id=r.id
-    JOIN products as p ON re.product_id = p.id
-    WHERE p.external_id = :productExternalId
-)
-""", nativeQuery = true)
-    List<ReviewEntry> findAllReviewEntriesOfReviewsWithThisProduct(UUID productExternalId);
-
 }

@@ -9,6 +9,8 @@ import io.github.zhyshko.model.product.ProductAttribute;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {StoreMapper.class})
 public abstract class ProductAttributeMapper {
 
@@ -26,6 +28,13 @@ public abstract class ProductAttributeMapper {
                 .orElseGet(() -> productAttributeDao.save(createProductAttribute(orderData)));
     }
     public abstract ProductAttributeData toDto(ProductAttribute order);
+
+    public List<ProductAttributeData> toDtolist(List<ProductAttribute> attributeList) {
+        return attributeList
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
 
     private ProductAttribute createProductAttribute(ProductAttributeData productAttributeData) {
         ProductAttribute.ProductAttributeBuilder<?, ?> productAttribute = ProductAttribute.builder();

@@ -24,8 +24,8 @@ public class DefaultOrderEntryService implements OrderEntryService {
     }
 
     @Override
-    public List<OrderEntry> getAllOrderEntriesOfOrdersWithThisProduct(UUID productId) {
-        return orderEntryDao.findAllOrderEntriesOfOrdersWithThisProduct(productId);
+    public List<OrderEntry> getAllOrderEntriesOfOrdersWithThisProduct(UUID storeId, UUID productId) {
+        return orderEntryDao.findAllOrderEntriesOfOrdersWithThisProductWithStoreId(storeId, productId);
     }
 
     @Override
