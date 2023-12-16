@@ -22,6 +22,6 @@ public class OrderData {
 
     private UserData owner;
     private List<OrderEntryData> orderEntries;
-    private LocalDateTime createdTime;
+    private LocalDateTime timeCreated;
 
 }

@@ -4,16 +4,15 @@ import io.github.zhyshko.model.Base;
 import io.github.zhyshko.model.product.Product;
 import io.github.zhyshko.model.review.ReviewEntry;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity(name="OrderEntry")
 @Table(name="order_entries")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder

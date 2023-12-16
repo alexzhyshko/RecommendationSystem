@@ -2,17 +2,15 @@ package io.github.zhyshko.model;
 
 import io.github.zhyshko.dto.StoreData;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @SuperBuilder
 @AllArgsConstructor

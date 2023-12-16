@@ -51,7 +51,7 @@ public abstract class OrderMapper {
         order.store(storeMapper.toModel(orderData.getStore()));
         order.owner(userMapper.toModel(orderData.getOwner()));
         order.orderEntries(createOrderEntryDataList(orderData.getOrderEntries()));
-        order.createdTime(orderData.getCreatedTime());
+        order.timeCreated(orderData.getTimeCreated());
 
         return order.build();
     }

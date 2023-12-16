@@ -3,16 +3,15 @@ package io.github.zhyshko.model.review;
 import io.github.zhyshko.model.Base;
 import io.github.zhyshko.model.product.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity(name="ReviewEntry")
 @Table(name="review_entries")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder

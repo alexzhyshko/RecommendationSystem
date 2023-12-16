@@ -40,7 +40,7 @@ public class DatabasePopulator{
                 .externalId(UUID.randomUUID())
                 .owner(userData)
                 .orderEntries(orderEntryDataList)
-                .createdTime(LocalDateTime.now())
+                .timeCreated(LocalDateTime.now())
                 .store(createStoreData())
                 .build();
     }
