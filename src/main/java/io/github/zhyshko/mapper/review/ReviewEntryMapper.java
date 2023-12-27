@@ -9,6 +9,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +40,8 @@ public abstract class ReviewEntryMapper {
         return reviewEntryDao.findByExternalIdAndStoreId(reviewEntryData.getExternalId(), reviewEntryData.getStore().getExternalId())
                 .map(re -> {
                     re.setMark(reviewEntryData.getMark());
-                    re.setTimeCreated(reviewEntryData.getTimeCreated());
+                    re.setTimeCreated(reviewEntryData.getTimeCreated() == null
+                            ? LocalDateTime.now() : reviewEntryData.getTimeCreated());
                     return reviewEntryDao.save(re);
                 });
     }

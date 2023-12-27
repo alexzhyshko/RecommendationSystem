@@ -20,7 +20,6 @@ public class DefaultIndexerFacade implements IndexerFacade {
     }
 
     public void indexOrder(OrderData orderData) {
-        System.out.println("Saving "+orderMapper.toModel(orderData));
         orderService.save(orderMapper.toModel(orderData));
     }
 

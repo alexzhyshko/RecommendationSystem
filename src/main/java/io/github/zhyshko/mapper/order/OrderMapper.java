@@ -33,6 +33,10 @@ public abstract class OrderMapper {
         }
 
         return orderDao.findByExternalIdAndStoreId(orderData.getExternalId(), orderData.getStore().getExternalId())
+                .map(order -> {
+                    order.setOrderEntries(createOrderEntryDataList(orderData.getOrderEntries()));
+                    return order;
+                })
                 .orElseGet(() -> orderDao.save(createOrder(orderData)));
 
     }
