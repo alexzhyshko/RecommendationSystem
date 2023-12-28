@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 @Component
 public class CachedRecommendationsFacade implements RecommendationsFacade {
 
-    private static final Long CACHE_TTL = 3600L;
+    private static final Long CACHE_TTL = 0L;
     private Map<CacheKey, CacheValue> cacheMap = new HashMap<>();
 
     @Autowired
