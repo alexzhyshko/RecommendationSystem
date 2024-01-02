@@ -9,6 +9,7 @@ import io.github.zhyshko.service.order.OrderEntryService;
 import io.github.zhyshko.service.product.ProductService;
 import io.github.zhyshko.strategy.ProductRatingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,14 +33,15 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
     @Override
     public Map<ProductData, Long> getForUser(UUID storeId, UUID userExternalId) {
         Map<ProductData, Integer> userOrderedProducts = orderEntryMapper.toDtoList(orderEntryService
-                .getUserOrderEntries(userExternalId)).stream()
+                        .getUserOrderEntries(userExternalId)).stream()
                 .collect(Collectors.toMap(OrderEntryData::getProduct, (oe) -> oe.getReviewEntry().getMark()));
 
         return userOrderedProducts
                 .keySet()
                 .stream()
-                .flatMap(p -> this.findInBatch(storeId, p).entrySet().stream())
-                .map(e -> this.processStrategies(storeId, userExternalId, e, getMark(userOrderedProducts.get(e.getKey()))))
+                .map(p -> Pair.of(p, this.findInBatch(storeId, p).entrySet()))
+                .flatMap(pair -> this.processStrategies(storeId, userExternalId, pair.getSecond(),
+                        getMark(userOrderedProducts.get(pair.getFirst()))).stream())
                 .map(e -> this.decreaseAlreadyBoughtProductRating(e, userOrderedProducts.keySet()))
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)));
     }
@@ -58,10 +60,10 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
     private Map.Entry<ProductData, Long> decreaseAlreadyBoughtProductRating(
             Map.Entry<ProductData, Long> productDataLongEntry,
             Collection<ProductData> userOrderedProducts) {
-       if(userOrderedProducts.contains(productDataLongEntry.getKey())) {
-           productDataLongEntry.setValue(productDataLongEntry.getValue()>0?-1L:productDataLongEntry.getValue());
-       }
-       return productDataLongEntry;
+        if (userOrderedProducts.contains(productDataLongEntry.getKey())) {
+            productDataLongEntry.setValue(productDataLongEntry.getValue() > 0 ? -1L : productDataLongEntry.getValue());
+        }
+        return productDataLongEntry;
     }
 
     private Map<ProductData, Long> findInBatch(UUID storeId, ProductData productData) {
@@ -72,7 +74,7 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
                 .collect(Collectors.groupingBy(OrderEntryData::getProduct, Collectors.counting()));
 
         Map<ProductData, Long> aggregatedDataByRating = orderEntries.stream()
-                .collect(Collectors.groupingBy(OrderEntryData::getProduct, Collectors.summingLong(oe->oe.getReviewEntry().getMark())))
+                .collect(Collectors.groupingBy(OrderEntryData::getProduct, Collectors.summingLong(oe -> oe.getReviewEntry().getMark())))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
@@ -82,11 +84,11 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
         return aggregatedDataByRating;
     }
 
-    private Map.Entry<ProductData, Long> processStrategies(UUID storeId, UUID userExternalId,
-                                                           Map.Entry<ProductData, Long> entry, Integer mark) {
-        productRatingStrategies.forEach(strategy -> strategy.recalculateRating(storeId, userExternalId, entry, mark));
+    private Set<Map.Entry<ProductData, Long>> processStrategies(UUID storeId, UUID userExternalId,
+                                                                Set<Map.Entry<ProductData, Long>> set, Integer mark) {
+        set.forEach(it -> productRatingStrategies.forEach(strategy -> strategy.recalculateRating(storeId, userExternalId, it, mark)));
 
-        return entry;
+        return set;
     }
 
     private Integer getMark(Integer mark) {
