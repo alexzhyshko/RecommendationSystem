@@ -10,4 +10,6 @@ public interface OrderEntryService {
     List<OrderEntry> getAllOrderEntriesOfOrdersWithThisProduct(UUID storeId, UUID productId);
 
     OrderEntry saveOrUpdate(OrderEntry orderEntry);
+
+    List<OrderEntry> getUserOrderEntries(UUID userExternalId);
 }

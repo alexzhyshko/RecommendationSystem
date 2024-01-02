@@ -1,7 +1,6 @@
 package io.github.zhyshko.dao.order;
 
 import io.github.zhyshko.model.order.OrderEntry;
-import io.github.zhyshko.model.review.ReviewEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,5 +27,14 @@ WHERE o.id IN (
 )
 """, nativeQuery = true)
     List<OrderEntry> findAllOrderEntriesOfOrdersWithThisProductWithStoreId(UUID storeId, UUID productExternalId);
+
+    @Query(value = """
+SELECT DISTINCT oe.*, o.time_created as order_created FROM order_entries as oe 
+JOIN orders as o ON oe.order_id=o.id
+JOIN users as u ON o.owner_id=u.id
+WHERE u.external_id=:externalId
+ORDER BY order_created DESC
+""", nativeQuery = true)
+    List<OrderEntry> findAllUserOrderEntries(UUID externalId);
 
 }

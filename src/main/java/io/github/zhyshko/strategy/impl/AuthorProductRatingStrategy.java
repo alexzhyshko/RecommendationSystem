@@ -23,7 +23,7 @@ public class AuthorProductRatingStrategy implements ProductRatingStrategy {
 
     @Override
     public void recalculateRating(UUID storeId, UUID userExternalId,
-                                  Map.Entry<ProductData, Long> entry) {
+                                  Map.Entry<ProductData, Long> entry, Integer mark) {
         List<AuthorData> mostPopularAttributes = authorMapper.toDtolist(
                 authorService.getMostPopularUserAuthors(storeId, userExternalId));
 
@@ -35,6 +35,10 @@ public class AuthorProductRatingStrategy implements ProductRatingStrategy {
                 .distinct()
                 .count();
 
-        entry.setValue(entry.getValue() + count * 5);
+        entry.setValue(entry.getValue() + count * (5 * getMarkCoefficient(mark)));
+    }
+
+    private int getMarkCoefficient(Integer mark) {
+        return mark >= 0 ? 1 : -1;
     }
 }

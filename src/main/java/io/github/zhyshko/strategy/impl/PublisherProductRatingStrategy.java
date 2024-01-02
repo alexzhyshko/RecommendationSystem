@@ -23,7 +23,7 @@ public class PublisherProductRatingStrategy implements ProductRatingStrategy {
 
     @Override
     public void recalculateRating(UUID storeId, UUID userExternalId,
-                                  Map.Entry<ProductData, Long> entry) {
+                                  Map.Entry<ProductData, Long> entry, Integer mark) {
         List<PublisherData> mostPopularAttributes = publisherMapper.toDtolist(
                 publisherService.getMostPopularUserPublishers(storeId, userExternalId));
 

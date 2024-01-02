@@ -37,4 +37,9 @@ public class DefaultOrderEntryService implements OrderEntryService {
                 })
                 .orElseGet(() -> orderEntryDao.save(orderEntry));
     }
+
+    @Override
+    public List<OrderEntry> getUserOrderEntries(UUID userExternalId) {
+        return orderEntryDao.findAllUserOrderEntries(userExternalId);
+    }
 }

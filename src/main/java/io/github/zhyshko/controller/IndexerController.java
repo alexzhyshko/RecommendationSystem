@@ -1,6 +1,5 @@
 package io.github.zhyshko.controller;
 
-import io.github.zhyshko.DatabasePopulator;
 import io.github.zhyshko.dto.order.OrderData;
 import io.github.zhyshko.facade.IndexerFacade;
 import org.springframework.beans.factory.annotation.Autowired;

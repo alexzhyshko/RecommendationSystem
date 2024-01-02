@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface ProductRatingStrategy {
 
     void recalculateRating(UUID storeId, UUID userExternalId,
-                           Map.Entry<ProductData, Long> entry);
+                           Map.Entry<ProductData, Long> entry, Integer mark);
 
 }

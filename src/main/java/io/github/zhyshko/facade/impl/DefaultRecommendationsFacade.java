@@ -31,13 +31,16 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
 
     @Override
     public Map<ProductData, Long> getForUser(UUID storeId, UUID userExternalId) {
-        List<ProductData> userOrderedProducts = productMapper.toDtoList(productService.getOrderedProducts(userExternalId));
+        Map<ProductData, Integer> userOrderedProducts = orderEntryMapper.toDtoList(orderEntryService
+                .getUserOrderEntries(userExternalId)).stream()
+                .collect(Collectors.toMap(OrderEntryData::getProduct, (oe) -> oe.getReviewEntry().getMark()));
 
         return userOrderedProducts
+                .keySet()
                 .stream()
                 .flatMap(p -> this.findInBatch(storeId, p).entrySet().stream())
-                .map(e -> this.processStrategies(storeId, userExternalId, e))
-                .map(e -> this.decreaseAlreadyBoughtProductRating(e, userOrderedProducts))
+                .map(e -> this.processStrategies(storeId, userExternalId, e, getMark(userOrderedProducts.get(e.getKey()))))
+                .map(e -> this.decreaseAlreadyBoughtProductRating(e, userOrderedProducts.keySet()))
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)));
     }
 
@@ -54,7 +57,7 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
 
     private Map.Entry<ProductData, Long> decreaseAlreadyBoughtProductRating(
             Map.Entry<ProductData, Long> productDataLongEntry,
-            List<ProductData> userOrderedProducts) {
+            Collection<ProductData> userOrderedProducts) {
        if(userOrderedProducts.contains(productDataLongEntry.getKey())) {
            productDataLongEntry.setValue(productDataLongEntry.getValue()>0?-1L:productDataLongEntry.getValue());
        }
@@ -80,10 +83,14 @@ public class DefaultRecommendationsFacade implements RecommendationsFacade {
     }
 
     private Map.Entry<ProductData, Long> processStrategies(UUID storeId, UUID userExternalId,
-                                                           Map.Entry<ProductData, Long> entry) {
-        productRatingStrategies.forEach(strategy -> strategy.recalculateRating(storeId, userExternalId, entry));
+                                                           Map.Entry<ProductData, Long> entry, Integer mark) {
+        productRatingStrategies.forEach(strategy -> strategy.recalculateRating(storeId, userExternalId, entry, mark));
 
         return entry;
+    }
+
+    private Integer getMark(Integer mark) {
+        return mark == null ? 0 : mark;
     }
 
 }
