@@ -37,3 +37,4 @@ out/
 .vscode/
 
 src/main/java/io/github/zhyshko/DatabasePopulator.java
+src/main/java/io/github/zhyshko/controller/TestController.java

@@ -1,5 +1,6 @@
 package io.github.zhyshko.controller;
 
+import io.github.zhyshko.DatabasePopulator;
 import io.github.zhyshko.dto.order.OrderData;
 import io.github.zhyshko.facade.IndexerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ public class IndexerController {
 
     @Autowired
     private IndexerFacade indexerFacade;
-    @Autowired
-    private DatabasePopulator databasePopulator;
 
     public IndexerController(IndexerFacade indexerFacade) {
         this.indexerFacade = indexerFacade;
@@ -31,9 +30,6 @@ public class IndexerController {
         return HttpStatus.ACCEPTED;
     }
 
-    @GetMapping("/init")
-    public void init() {
-        databasePopulator.populateDatabase(indexerFacade);
-    }
+
 
 }
